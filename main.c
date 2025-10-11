@@ -1,6 +1,6 @@
 #include <stdio.h>
-#include <utmpx.h>
 #include <unistd.h>
+#include <utmpx.h>
 
 int main() {
 	// Hello World (exploring unistd.h)
@@ -8,6 +8,7 @@ int main() {
 	gethostname(hostname, 24);
 	printf("Hello, %s@%s on %s!\n\n", getlogin(), hostname, ttyname(STDOUT_FILENO));
 
+	// Note to self: either I'm stupid or those predefined functions are kind of dumb because I'll have to "fread() the data into the struct" anyway
 	struct utmpx *data;
 	data = getutxent();
 
@@ -16,7 +17,7 @@ int main() {
 		return 1;
 	}
 
-	// whoa, this is worthless (so far)
+	// This also doesn't always output, or data is *very* delayed...
 	while (data != NULL) {
 		printf("%.*d ", (int)(sizeof data->ut_pid), data->ut_pid);
 		printf("%.*s ", (int)(sizeof data->ut_line), data->ut_line);
@@ -25,8 +26,5 @@ int main() {
 
 		data = getutxent();
 	}
-
-	// Close and exit
-	endutxent();
 	return 0;
 }
