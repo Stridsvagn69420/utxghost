@@ -29,7 +29,7 @@ int remove_entries(FILE* file, const char* user) {
 	}
 
 	// Allocate space
-	struct utmpx** utx_arr = malloc(utxsize);
+	struct utmpx* utx_arr = malloc(utxsize);
 	if (!utx_arr) {
 		// ERR: malloc error
 		return 1;
@@ -39,7 +39,7 @@ int remove_entries(FILE* file, const char* user) {
 	long read_n = 0;
 	struct utmpx utx; // TODO: can probably be skipped
 	while (fread(&utx, utmpx_size, 1, file) == 1) {
-		memcpy(utx_arr[read_n], &utx, utmpx_size);
+		memcpy(&utx_arr[read_n], &utx, utmpx_size);
 		read_n++;
 	}
 
@@ -58,15 +58,15 @@ int remove_entries(FILE* file, const char* user) {
 	long write_n = 0;
 	for (unsigned int i = 0; i < read_n; i++) {
 		// Skip if name matches
-		struct utmpx* utx_curr = utx_arr[i];
-		if (strncmp(utx_curr->ut_user, user, ut_user_size) == 0) {
+		struct utmpx utx_curr = utx_arr[i];
+		if (strncmp(utx_curr.ut_user, user, ut_user_size) == 0) {
 			continue;
 		} else {
 			write_n++;
 		}
 
 		// Attempt to write
-		fwrite(utx_curr, utmpx_size, 1, file);
+		fwrite(&utx_curr, utmpx_size, 1, file);
 		if (ferror(file)) {
 			// ERR: write error occured
 			printf("Write error: %s\n", strerror(errno));
