@@ -10,13 +10,18 @@
 #include "utx.h"
 
 int main(int argc, char* argv[]) {
-	// Read username
+	// Read username or use argument
 	char username[UT_USER_SIZE];
-	if (getlogin_r(username, UT_USER_SIZE)) {
-		printf("(Phasmo gameplay) What is your name???\n");
-		return EXIT_FAILURE;
+	char* name;
+	if (argc < 3 ) {
+		if (getlogin_r(username, UT_USER_SIZE)) {
+			printf("(Phasmo gameplay) What is your name???\n");
+			return EXIT_FAILURE;
+		}
+		name = username;
+	} else {
+		name = argv[2];
 	}
-	printf("Hello, %s!\n", username);
 
 	// Check for file
 	if (argc < 2) {
@@ -24,21 +29,14 @@ int main(int argc, char* argv[]) {
 		return EXIT_FAILURE;
 	}
 
-	// Open file
-	FILE* fp = fopen(argv[1], "r+b");
-	if (!fp) {
-		printf("Error: %s\n", strerror(errno));
-		return EXIT_FAILURE;
-	}
-
 	// Remove entries
-	if (remove_entries(fp, username)) {
+	if (remove_entries_path(argv[1], name)) {
 		printf("An error occured while trying to remove your entries :(\n");
+		printf("Error: %s\n", strerror(errno));
 		return EXIT_FAILURE;
 	}
 
 	// Close file and exit
 	printf("Done!\n");
-	fclose(fp);
 	return EXIT_SUCCESS;
 }

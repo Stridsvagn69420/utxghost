@@ -1,45 +1,41 @@
 #include "utx.h"
 
-// TODO: Return an enum member instead of just 1 and 0 for easier error handling.
-int remove_entries(FILE* file, const char* user) {
+#define UTX_OPEN_MODE "r+b"
+
+UtxStatus remove_entries(FILE* file, const char* user) {
 	// Get and check file size
 	struct stat ut_stat;
 	int filedesc = fileno(file);
-	fstat(filedesc, &ut_stat);
+	if(fstat(filedesc, &ut_stat)) {
+		return STAT_ERROR;
+	}
 
+	// Check file size conditions
 	long utxsize = ut_stat.st_size;
 	if (utxsize % UTMPX_SIZE != 0) {
-		// ERR: file is probably not a utmpx-compatible file (size does not align)
-		return 1;
+		return NOT_UTMPX;
 	}
 	if (utxsize == 0) {
-		// ERR: file is empty (not an actual error)
-		return 0;
+		return FILE_EMPTY;
 	}
 
 	// Allocate space
 	struct utmpx* utx_arr = malloc(utxsize);
 	if (!utx_arr) {
-		// ERR: malloc error
-		return 1;
+		return MALLOC_ERROR;
 	}
 
 	// Read file
 	long read_n = 0;
-	struct utmpx utx; // TODO: can probably be skipped
-	while (fread(&utx, UTMPX_SIZE, 1, file) == 1) {
-		memcpy(&utx_arr[read_n], &utx, UTMPX_SIZE);
+	while (fread(&utx_arr[read_n], UTMPX_SIZE, 1, file) == 1) {
 		read_n++;
 	}
 
 	// Check for read errors
 	long utx_n = utxsize / UTMPX_SIZE;
 	if (ferror(file) || utx_n != read_n) {
-		// ERR: read error occured
-		printf("Error: %s\n", strerror(errno));
-		printf("n: %li (expected), %li (actual)\n", utx_n, read_n);
 		free(utx_arr);
-		return 1;
+		return READ_ERROR;
 	}
 
 	// Filter out entries
@@ -57,17 +53,27 @@ int remove_entries(FILE* file, const char* user) {
 		// Attempt to write
 		fwrite(&utx_curr, UTMPX_SIZE, 1, file);
 		if (ferror(file)) {
-			// ERR: write error occured
-			printf("Write error: %s\n", strerror(errno));
+			free(utx_arr);
+			return WRITE_ERROR;
 		}
 	}
 
 	// Truncate excess space
 	free(utx_arr);
 	long newsize = UTMPX_SIZE * (read_n - write_n);
-	if (ftruncate(filedesc, newsize) != 0) {
-		// ERR: could not truncate
-		return 1;
+	if (ftruncate(filedesc, newsize)) {
+		return TRUNCATE_ERROR;
 	}
-	return 0;
+	return NONE;
+}
+
+UtxStatus remove_entries_path(const char* path, const char* user) {
+	FILE* fp = fopen(path, UTX_OPEN_MODE);
+	if (!fp) {
+		return OPEN_ERROR;
+	}
+
+	UtxStatus status = remove_entries(fp, user);
+	fclose(fp);
+	return status;
 }
