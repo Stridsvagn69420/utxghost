@@ -1,8 +1,9 @@
 cli interface:
-- args without flags should be seen as filepaths to use, defaults to platform's utmpx file locations if none are given
 - -d/--daemon: special flag for daemon mode (otherwise runs in one-shot mode)
 - generic meta flags like -V/--version, -h/--help, etc.
 - -u/--user: use given user instead of getlogin_r()
+- files should be specified as either non-flag arguments or as a "-f" flag (will have to decide later on)
+- get cli options via getopt.h (available on FreeBSD and OpenBSD too)
 
 daemon mode:
 - ignores most other flags

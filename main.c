@@ -5,11 +5,14 @@
 #include <errno.h>
 // POSIX
 #include <unistd.h>
+// GNU
+#include <getopt.h>
 
 // utxghost
-#include "utx.h"
+#include "utx/remove_entries.h"
 
-int main(int argc, char* argv[]) {
+// TODO: The previous main method, it will get replaced though.
+int simplemain(int argc, char* argv[]) {
 	// Read username or use argument
 	char username[UT_USER_SIZE];
 	char* name;
@@ -39,4 +42,8 @@ int main(int argc, char* argv[]) {
 	// Close file and exit
 	printf("Done!\n");
 	return EXIT_SUCCESS;
+}
+
+int main(int argc, char* argv[]) {
+	return simplemain(argc, argv);
 }

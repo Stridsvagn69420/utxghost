@@ -1,4 +1,4 @@
-#include "utx.h"
+#include "remove_entries.h"
 
 #define UTX_OPEN_MODE "r+b"
 
