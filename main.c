@@ -11,39 +11,22 @@
 // utxghost
 #include "utx/remove_entries.h"
 
-// TODO: The previous main method, it will get replaced though.
-int simplemain(int argc, char* argv[]) {
-	// Read username or use argument
-	char username[UT_USER_SIZE];
-	char* name;
-	if (argc < 3 ) {
-		if (getlogin_r(username, UT_USER_SIZE)) {
-			printf("(Phasmo gameplay) What is your name???\n");
-			return EXIT_FAILURE;
-		}
-		name = username;
-	} else {
-		name = argv[2];
-	}
-
-	// Check for file
-	if (argc < 2) {
-		printf("No file provided!\n");
-		return EXIT_FAILURE;
-	}
-
-	// Remove entries
-	if (remove_entries_path(argv[1], name)) {
-		printf("An error occured while trying to remove your entries :(\n");
-		printf("Error: %s\n", strerror(errno));
-		return EXIT_FAILURE;
-	}
-
-	// Close file and exit
-	printf("Done!\n");
-	return EXIT_SUCCESS;
-}
-
 int main(int argc, char* argv[]) {
-	return simplemain(argc, argv);
+	// Set command-line options
+	const char* shortopts = "Vhu:f:";
+	static struct option cliopts[] = {
+		{"version", no_argument, NULL, 'V'},
+		{"help", no_argument, NULL, 'h'},
+		{"user", required_argument, NULL, 'u'},
+		{"file", required_argument, NULL, 'f'},
+		//{"daemon", no_argument, NULL, 'd'},
+		{NULL, no_argument, NULL, 0}
+	};
+
+	// Parse command-line options
+	int c;
+	while ((c = getopt_long(argc, argv, shortopts, cliopts, NULL)) != EOF) {
+		printf("Opts: %d (%c)\n", c, (char) c);
+	}
+	return 0;
 }
