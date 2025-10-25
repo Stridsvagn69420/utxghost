@@ -5,10 +5,10 @@ const struct option longopts[] = {
 	{"version", no_argument, NULL, 'V'},
 	{"help", no_argument, NULL, 'h'},
 	{"user", required_argument, NULL, 'u'},
-	{"daemon", no_argument, NULL, 'D'},
+	{"daemon", no_argument, NULL, 'd'},
 	{NULL, no_argument, NULL, 0}
 };
-const char shortopts[] = "Vhu:D";
+const char shortopts[] = "Vhu:";
 
 // Wrapper function around getopt_long()
 void getflags(int argc, char* argv[], Fools* bools, char* user, size_t usersize) {
@@ -22,7 +22,7 @@ void getflags(int argc, char* argv[], Fools* bools, char* user, size_t usersize)
 			case 'V':
 				bools->version = true;
 				break;
-			case 'D':
+			case 'd':
 				bools ->daemon = true;
 				break;
 			case 'u':

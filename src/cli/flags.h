@@ -2,9 +2,9 @@
 #define CLI_FLAGS_H
 
 // C Standard
-#include <stdio.h>
-#include <stdlib.h>
 #include <stdbool.h>
+#include <stddef.h>
+#include <stdio.h>
 #include <string.h>
 // GNU
 #include <getopt.h>

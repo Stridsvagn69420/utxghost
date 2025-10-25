@@ -3,7 +3,10 @@ project(utxghost C)
 
 add_executable(utxghost main.c)
 target_sources(utxghost PRIVATE cli/flags.h cli/flags.c)
+target_sources(utxghost PRIVATE cli/help.h cli/help.c)
+target_sources(utxghost PRIVATE cli/version.h cli/version.c)
 target_sources(utxghost PRIVATE utx/types.h)
+target_sources(utxghost PRIVATE utx/sysfiles.h utx/sysfiles.c)
 target_sources(utxghost PRIVATE utx/remove_entries.h utx/remove_entries.c)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra")
