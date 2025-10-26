@@ -1,6 +1,8 @@
 #ifndef UTX_TYPES_H
 #define UTX_TYPES_H
 
+// C Standard
+#include <stdbool.h>
 // POSIX
 #include <utmpx.h>
 
@@ -37,5 +39,11 @@ typedef enum {
 	// fstat() failed. Error can be read via `errno`.
 	STAT_ERROR
 } UtxStatus;
+
+// Get string to print for a given UtxStatus
+char* utxstring(UtxStatus status);
+
+// Check if UtxStatus code is an error
+bool utxiserr(UtxStatus status);
 
 #endif

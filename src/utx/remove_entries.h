@@ -1,4 +1,3 @@
-// Submodule containing utmpx-related wrapper functions
 #ifndef UTX_REMOVE_ENTRIES_H
 #define UTX_REMOVE_ENTRIES_H
 
