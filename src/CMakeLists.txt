@@ -8,7 +8,6 @@ target_sources(utxghost PRIVATE cli/version.h cli/version.c)
 target_sources(utxghost PRIVATE utx/types.h utx/types.c)
 target_sources(utxghost PRIVATE utx/sysfiles.h utx/sysfiles.c)
 target_sources(utxghost PRIVATE utx/remove_entries.h utx/remove_entries.c)
-target_sources(utxghost PRIVATE utx/rm_entries_argv.h utx/rm_entries_argv.c)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra")
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O3 -s -w")

@@ -7,7 +7,7 @@
 
 // utxghost
 #include "utx/sysfiles.h"
-#include "utx/rm_entries_argv.h"
+#include "utx/remove_entries.h"
 #include "cli/flags.h"
 #include "cli/help.h"
 #include "cli/version.h"
@@ -38,9 +38,9 @@ int main(int argc, char* argv[]) {
 	bool errd;
 	// If optind is smaller than argc, there are non-option arguments left in argv.
 	if (optind < argc) {
-		errd = rm_entries_argv(optind, argc, (const char**) argv, user);
+		errd = remove_entries_argv(optind, argc, (const char**) argv, user);
 	} else {
-		errd = rm_entries_argv(0, sysfilesc, sysfilesv, user);
+		errd = remove_entries_argv(0, sysfilesc, sysfilesv, user);
 	}
 	return (errd) ? EXIT_FAILURE : EXIT_SUCCESS;
 }
