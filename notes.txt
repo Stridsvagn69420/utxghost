@@ -1,6 +1,0 @@
-daemon mode:
-- ignores most other flags
-- uses platform's default system utmpx file locations (maybe also allow different paths like above)
-- gets signal from client, then attempts to read uid and remove entries for that user (will/should use Unix Domain Socket later on)
-- writes PID to runfs (e.g. /run/utxghost/utxghost.pid)
-- should complain at launch if it's not running with group utmp

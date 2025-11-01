@@ -17,7 +17,8 @@
 //
 // `file`: A utmpx-compatible file opened as `r+` or `rb+`. Any other mode will fail.
 // `user`: String of the username to be filtered out. Should be `UT_USER_SIZE` long.
-UtxStatus remove_entries(FILE* file, const char* user);
+// `tv`: A `timeval` struct that will be set to the last non-removed entry's time.
+UtxStatus remove_entries(FILE* file, const char* user, struct timeval* tv);
 
 // Remove user entries from an utmpx file
 //

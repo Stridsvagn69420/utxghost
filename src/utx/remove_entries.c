@@ -2,7 +2,7 @@
 
 #define UTX_OPEN_MODE "r+b"
 
-UtxStatus remove_entries(FILE* file, const char* user) {
+UtxStatus remove_entries(FILE* file, const char* user, struct timeval* tv) {
 	// Get and check file size
 	struct stat ut_stat;
 	int filedesc = fileno(file);
@@ -47,6 +47,8 @@ UtxStatus remove_entries(FILE* file, const char* user) {
 		if (strncmp(utx_curr.ut_user, user, UT_USER_SIZE) == 0) {
 			continue;
 		} else {
+			tv->tv_sec = utx_curr.ut_tv.tv_sec;
+			tv->tv_usec = utx_curr.ut_tv.tv_usec;
 			write_n++;
 		}
 
@@ -68,13 +70,24 @@ UtxStatus remove_entries(FILE* file, const char* user) {
 }
 
 UtxStatus remove_entries_path(const char* path, const char* user) {
+	// Open file
 	FILE* fp = fopen(path, UTX_OPEN_MODE);
 	if (!fp) {
 		return OPEN_ERROR;
 	}
 
-	UtxStatus status = remove_entries(fp, user);
+	// Run core function
+	struct timeval mtime;
+	UtxStatus status = remove_entries(fp, user, &mtime);
+
+	// Close file
 	fclose(fp);
+
+	// Reset file times (has to be done after fclose())
+	struct timeval tv[2] = {mtime, mtime};
+	if (utimes(path, tv)) {
+		return UTIME_ERROR;
+	}
 	return status;
 }
 

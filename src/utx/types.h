@@ -37,7 +37,10 @@ typedef enum {
 	OPEN_ERROR,
 
 	// fstat() failed. Error can be read via `errno`.
-	STAT_ERROR
+	STAT_ERROR,
+
+	// futimes() failed. Error can be read via `errno`.
+	UTIME_ERROR
 } UtxStatus;
 
 // Get string to print for a given UtxStatus

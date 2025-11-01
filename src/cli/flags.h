@@ -18,7 +18,6 @@ extern const struct option longopts[];
 typedef struct {
 	bool help;
 	bool version;
-	bool daemon;
 } Fools;
 
 // Wrapper function around getopt_long()

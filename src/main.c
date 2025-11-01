@@ -18,7 +18,7 @@ int main(int argc, char* argv[]) {
 	getlogin_r(user, UT_USER_SIZE);
 
 	// Get command-line config
-	Fools fools = { false, false, false };
+	Fools fools = { false, false };
 	getflags(argc, argv, &fools, user, UT_USER_SIZE);
 
 	// Handle flag-booleans
@@ -26,10 +26,6 @@ int main(int argc, char* argv[]) {
 		return print_help();
 	} else if (fools.version) {
 		return print_version();
-	}
-	// TODO: Implement daemon mode
-	if (fools.daemon) {
-		fprintf(stderr, "daemon mode is not implemented yet :(\n");
 	}
 
 	// Print username to be removed from files

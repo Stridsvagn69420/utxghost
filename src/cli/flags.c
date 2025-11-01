@@ -5,7 +5,6 @@ const struct option longopts[] = {
 	{"version", no_argument, NULL, 'V'},
 	{"help", no_argument, NULL, 'h'},
 	{"user", required_argument, NULL, 'u'},
-	{"daemon", no_argument, NULL, 'd'},
 	{NULL, no_argument, NULL, 0}
 };
 const char shortopts[] = "Vhu:";
@@ -21,9 +20,6 @@ void getflags(int argc, char* argv[], Fools* bools, char* user, size_t usersize)
 				break;
 			case 'V':
 				bools->version = true;
-				break;
-			case 'd':
-				bools ->daemon = true;
 				break;
 			case 'u':
 				strncpy(user, optarg, usersize);
